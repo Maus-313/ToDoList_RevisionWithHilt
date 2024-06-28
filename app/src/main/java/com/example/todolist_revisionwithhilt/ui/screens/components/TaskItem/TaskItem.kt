@@ -1,0 +1,87 @@
+package com.example.todolist_revisionwithhilt.ui.screens.components.TaskItem
+
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Reorder
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+
+
+@Composable
+fun TaskItem(
+    id: Int,
+    title: String,
+    description: String,
+){
+    attempt1(text = title)
+}
+
+@Composable
+private fun attempt1(text: String){
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(5.dp)
+            .clip(RoundedCornerShape(10.dp)),
+        border = BorderStroke(1.dp, Color.Black),
+    ){
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            IconButton(onClick = { /*TODO*/ }) {
+                Icon(imageVector = Icons.Default.Reorder, contentDescription = "Reorder")
+            }
+            Text(text = text)
+            IconButton(onClick = { /*TODO*/ }) {
+                Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete")
+            }
+        }
+    }
+}
+
+@Composable
+private fun attempt2(text: String){
+    TextField(
+        value = text,
+        modifier = Modifier.padding(5.dp).clip(RoundedCornerShape(10.dp)),
+        onValueChange = {},
+        leadingIcon = {
+            IconButton(onClick = { /*TODO*/ }) {
+                Icon(imageVector = Icons.Default.Menu, contentDescription = "Reorder")
+            }
+        },
+        trailingIcon = {
+            IconButton(onClick = { /*TODO*/ }) {
+                Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete")
+            }
+        },
+    )
+}
+
+@Preview(
+    showBackground = true,
+    showSystemUi = true,
+)
+@Composable
+fun TaskItemPreview(){
+    TaskItem(1,title = "This is task1","Just testing")
+}
