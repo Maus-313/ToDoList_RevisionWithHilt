@@ -12,16 +12,19 @@ import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.todolist_revisionwithhilt.RoomDB.RoomDao
 import com.example.todolist_revisionwithhilt.RoomDB.TaskItemData
-import com.example.todolist_revisionwithhilt.TaskScreen
+import com.example.todolist_revisionwithhilt.util.Routes
 import com.example.todolist_revisionwithhilt.ui.screens.components.TaskItem.TaskItem
+import com.example.todolist_revisionwithhilt.util.UiEvents
 
 
 @Composable
@@ -43,13 +46,24 @@ private fun attempt1(
         factory = HomeScreenViewModelFactory(dao)
     )
 
+    LaunchedEffect(key1 = true) {
+        homeScreenViewModel.uiEvent.collect{ event ->
+            when(event){
+                is UiEvents.NavigateTo -> {
+                    navController.navigate(Routes.TaskScreen)
+                }
+            }
+        }
+    }
+
+
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
                 elevation = FloatingActionButtonDefaults.elevation(5.dp),
                 onClick ={
-                    navController.navigate(TaskScreen)
-                    Log.d("MAUS","AddTask Clicked!")
+                    homeScreenViewModel.onEvent(HomeScreenEvent.OnClickAddTask)
+
                 }
             ) {
                 Icon(imageVector = Icons.Default.Add, contentDescription = "Add Button")
@@ -71,25 +85,4 @@ private fun attempt1(
             }
         }
     }
-}
-
-
-fun getSampleTaskItems(): List<TaskItemData> {
-    return listOf(
-        TaskItemData(1, "Grocery Shopping", "Buy milk, eggs, bread, and cheese from the supermarket."),
-        TaskItemData(2, "Book Doctor Appointment", "Schedule a check-up appointment with Dr. Smith."),
-        TaskItemData(3, "Pay Bills", "Pay electricity and internet bills before the due date."),
-        TaskItemData(4, "Finish Project Report", "Complete the final draft of the project report and submit it."),
-        TaskItemData(5, "Call Mom", "Remember to call Mom and wish her a happy birthday."),
-        TaskItemData(6, "Clean House", "Wipe down the house and vacuum the floor."),
-        TaskItemData(7, "Call Parents", "Call your parents and wish them a happy birthday."),
-        TaskItemData(8, "Grocery Shopping", "Buy milk, eggs, bread, and cheese from the supermarket."),
-        TaskItemData(9, "Book Doctor Appointment", "Schedule a check-up appointment with Dr. Smith."),
-        TaskItemData(10, "Pay Bills", "Pay electricity and internet bills before the due date."),
-        TaskItemData(11, "Finish Project Report", "Complete the final draft of the project report and submit it."),
-        TaskItemData(12, "Call Mom", "Remember to call Mom and wish her a happy birthday."),
-        TaskItemData(13, "Clean House", "Wipe down the house and vacuum the floor."),
-        TaskItemData(14, "Call Parents", "Call your parents and wish them a happy birthday."),
-        TaskItemData(15, "Grocery Shopping", "Buy milk, eggs, bread, and cheese from the supermarket.",)
-    )
 }
