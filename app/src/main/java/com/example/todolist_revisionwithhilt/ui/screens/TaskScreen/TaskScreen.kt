@@ -11,30 +11,37 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.todolist_revisionwithhilt.RoomDB.RoomDao
+import com.example.todolist_revisionwithhilt.util.UiEvents
 
 
 @Composable
-fun TaskScreen(dao: RoomDao, navController: NavController){
-    attempt1(dao,navController)
-}
 
-@Composable
-private fun attempt1(dao: RoomDao, navController: NavController){
+fun TaskScreen(navController: NavController){
 
-    val taskScreenViewmodel = viewModel<TaskScreenViewModel>(
-        factory = TaskScreenViewModelFactory(dao,navController)
-    )
+    val viewModel: TaskScreenViewModel = hiltViewModel()
+    val title = viewModel.state.collectAsState().value.title.value
+    val description = viewModel.state.collectAsState().value.description.value
 
-    val title = taskScreenViewmodel.state.collectAsState().value.title.value
-    val description = taskScreenViewmodel.state.collectAsState().value.description.value
+    LaunchedEffect(key1 = Unit) {
+        viewModel.uiEvents.collect{ event ->
+            when (event) {
+                is UiEvents.PopBackStack -> {
+                    navController.popBackStack()
+                }
+                else -> {}
+            }
+        }
+    }
 
     Column (
         modifier = Modifier.fillMaxSize(),
@@ -44,7 +51,7 @@ private fun attempt1(dao: RoomDao, navController: NavController){
         TextField(
             value = title,
             onValueChange = {
-                taskScreenViewmodel.onEvent(TaskScreenEvents.UpdateTitle(it))
+                viewModel.onEvent(TaskScreenEvents.UpdateTitle(it))
             },
             modifier = Modifier.clip(RoundedCornerShape(5.dp)),
             label = {
@@ -54,7 +61,7 @@ private fun attempt1(dao: RoomDao, navController: NavController){
         TextField(
             value = description,
             onValueChange = {
-                taskScreenViewmodel.onEvent(TaskScreenEvents.UpdateDescription(it))
+                viewModel.onEvent(TaskScreenEvents.UpdateDescription(it))
             },
             modifier = Modifier.clip(RoundedCornerShape(5.dp)),
             label = {
@@ -62,7 +69,7 @@ private fun attempt1(dao: RoomDao, navController: NavController){
             }
         )
         Button(onClick = {
-            taskScreenViewmodel.onEvent(TaskScreenEvents.AddTask)
+            viewModel.onEvent(TaskScreenEvents.AddTask)
         }) {
             Icon(imageVector = Icons.Default.Add, contentDescription = "Add Button")
         }

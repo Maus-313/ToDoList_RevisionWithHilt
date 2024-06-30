@@ -36,6 +36,7 @@ fun HomeScreen(
                 is UiEvents.NavigateTo -> {
                     navController.navigate(Routes.TaskScreen)
                 }
+                else -> {}
             }
         }
     }

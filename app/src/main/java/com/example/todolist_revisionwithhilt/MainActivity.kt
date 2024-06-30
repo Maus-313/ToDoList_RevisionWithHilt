@@ -20,18 +20,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
-        val db by lazy{
-            Room.databaseBuilder(
-                context = applicationContext,
-                ToDoDatabase::class.java,
-                "RoomDB"
-            ).build()
-        }
-
         setContent {
             ToDoList_RevisionWithHiltTheme {
-                val roomDao = db.dao
                 val navController = rememberNavController()
                 NavHost(navController = navController, startDestination = Routes.HomeScreen){
                     composable<Routes.HomeScreen>{
@@ -41,8 +31,7 @@ class MainActivity : ComponentActivity() {
                     }
                     composable<Routes.TaskScreen>{
                         TaskScreen(
-                            dao = roomDao,
-                            navController
+                            navController = navController
                         )
                     }
                 }
