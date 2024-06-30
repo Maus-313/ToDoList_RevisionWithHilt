@@ -34,8 +34,6 @@ class TaskScreenViewModel(
         val task = TaskItemData(0, state.value.title.value, state.value.description.value)
         viewModelScope.launch(Dispatchers.IO) {
             dao.addTask(task)
-            Log.d("MAUS", "addTask: $task")
-            Log.d("MAUS", "Thread: ${Thread.currentThread().name}")
             withContext(Dispatchers.Main){
                 Log.d("MAUS","Inside withContext")
                 navController.popBackStack()

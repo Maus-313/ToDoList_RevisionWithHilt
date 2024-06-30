@@ -22,19 +22,22 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.todolist_revisionwithhilt.RoomDB.TaskItemData
+import com.example.todolist_revisionwithhilt.ui.screens.HomeScreen.HomeScreenEvent
+import com.example.todolist_revisionwithhilt.ui.screens.HomeScreen.HomeScreenViewModel
 
 
 @Composable
 fun TaskItem(
-    id: Int,
-    title: String,
-    description: String,
+    task: TaskItemData,
+    viewModel: HomeScreenViewModel
 ){
-    attempt1(text = title)
+    attempt1(task, viewModel)
 }
 
 @Composable
-private fun attempt1(text: String){
+private fun attempt1(task: TaskItemData, viewModel: HomeScreenViewModel){
+
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -50,38 +53,10 @@ private fun attempt1(text: String){
             IconButton(onClick = { /*TODO*/ }) {
                 Icon(imageVector = Icons.Default.Reorder, contentDescription = "Reorder")
             }
-            Text(text = text)
-            IconButton(onClick = { /*TODO*/ }) {
+            Text(text = task.title)
+            IconButton(onClick = { viewModel.onEvent(HomeScreenEvent.OnDeleteTask(task)) }) {
                 Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete")
             }
         }
     }
-}
-
-@Composable
-private fun attempt2(text: String){
-    TextField(
-        value = text,
-        modifier = Modifier.padding(5.dp).clip(RoundedCornerShape(10.dp)),
-        onValueChange = {},
-        leadingIcon = {
-            IconButton(onClick = { /*TODO*/ }) {
-                Icon(imageVector = Icons.Default.Menu, contentDescription = "Reorder")
-            }
-        },
-        trailingIcon = {
-            IconButton(onClick = { /*TODO*/ }) {
-                Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete")
-            }
-        },
-    )
-}
-
-@Preview(
-    showBackground = true,
-    showSystemUi = true,
-)
-@Composable
-fun TaskItemPreview(){
-    TaskItem(1,title = "This is task1","Just testing")
 }
