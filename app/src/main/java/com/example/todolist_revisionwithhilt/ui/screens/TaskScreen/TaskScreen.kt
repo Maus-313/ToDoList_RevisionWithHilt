@@ -44,7 +44,7 @@ private fun attempt1(dao: RoomDao, navController: NavController){
         TextField(
             value = title,
             onValueChange = {
-                taskScreenViewmodel.updateTitle(it)
+                taskScreenViewmodel.onEvent(TaskScreenEvents.UpdateTitle(it))
             },
             modifier = Modifier.clip(RoundedCornerShape(5.dp)),
             label = {
@@ -54,7 +54,7 @@ private fun attempt1(dao: RoomDao, navController: NavController){
         TextField(
             value = description,
             onValueChange = {
-                taskScreenViewmodel.updateDescription(it)
+                taskScreenViewmodel.onEvent(TaskScreenEvents.UpdateDescription(it))
             },
             modifier = Modifier.clip(RoundedCornerShape(5.dp)),
             label = {
@@ -62,7 +62,7 @@ private fun attempt1(dao: RoomDao, navController: NavController){
             }
         )
         Button(onClick = {
-            taskScreenViewmodel.addTask()
+            taskScreenViewmodel.onEvent(TaskScreenEvents.AddTask)
         }) {
             Icon(imageVector = Icons.Default.Add, contentDescription = "Add Button")
         }

@@ -22,25 +22,30 @@ class TaskScreenViewModel(
     val state = _state.asStateFlow()
 
 
-    fun updateTitle(text: String){
-        _state.value.title.value = text
-    }
-
-    fun updateDescription(text: String){
-        _state.value.description.value = text
-    }
-
-    fun addTask(){
-        val task = TaskItemData(0, state.value.title.value, state.value.description.value)
-        viewModelScope.launch(Dispatchers.IO) {
-            dao.addTask(task)
-            withContext(Dispatchers.Main){
-                Log.d("MAUS","Inside withContext")
-                navController.popBackStack()
+    fun onEvent(event: TaskScreenEvents){
+        when(event){
+            is TaskScreenEvents.UpdateTitle -> {
                 _state.value = _state.value.copy(
-                    title = mutableStateOf(""),
-                    description = mutableStateOf("")
+                    title = mutableStateOf(event.text)
                 )
+            }
+            is TaskScreenEvents.UpdateDescription -> {
+                _state.value = _state.value.copy(
+                    description = mutableStateOf(event.text)
+                )
+            }
+            is TaskScreenEvents.AddTask -> {
+                val task = TaskItemData(0, state.value.title.value, state.value.description.value)
+                viewModelScope.launch(Dispatchers.IO) {
+                    dao.addTask(task)
+                    withContext(Dispatchers.Main){
+                        navController.popBackStack()
+                        _state.value = _state.value.copy(
+                            title = mutableStateOf(""),
+                            description = mutableStateOf("")
+                        )
+                    }
+                }
             }
         }
     }
