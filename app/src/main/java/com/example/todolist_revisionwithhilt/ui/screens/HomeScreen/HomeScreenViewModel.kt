@@ -2,21 +2,24 @@ package com.example.todolist_revisionwithhilt.ui.screens.HomeScreen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.todolist_revisionwithhilt.RoomDB.RoomDao
+import com.example.todolist_revisionwithhilt.Repository.RoomRepo
 import com.example.todolist_revisionwithhilt.util.UiEvents
 import com.example.todolist_revisionwithhilt.util.Routes
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class HomeScreenViewModel(
-    private val dao: RoomDao
+@HiltViewModel
+class HomeScreenViewModel @Inject constructor(
+    private val repo: RoomRepo
 ): ViewModel() {
 
-    private val _state = MutableStateFlow(HomeState(dao.getAllTasks()))
+    private val _state = MutableStateFlow(HomeState(repo.getAllTasks()))
     val state = _state.asStateFlow()
 
     private val _uiEvent = Channel<UiEvents>()
@@ -26,7 +29,7 @@ class HomeScreenViewModel(
         when(event){
             is HomeScreenEvents.OnDeleteTask -> {
                 viewModelScope.launch(Dispatchers.IO){
-                    dao.deleteTask(event.task)
+                    repo.deleteTask(event.task)
                 }
             }
             is HomeScreenEvents.OnClickAddTask -> {
@@ -40,4 +43,5 @@ class HomeScreenViewModel(
             _uiEvent.send(event)
         }
     }
+
 }

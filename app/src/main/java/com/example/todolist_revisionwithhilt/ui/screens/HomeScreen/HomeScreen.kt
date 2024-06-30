@@ -16,6 +16,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.todolist_revisionwithhilt.RoomDB.RoomDao
@@ -23,25 +24,11 @@ import com.example.todolist_revisionwithhilt.util.Routes
 import com.example.todolist_revisionwithhilt.ui.screens.components.TaskItem.TaskItem
 import com.example.todolist_revisionwithhilt.util.UiEvents
 
-
 @Composable
 fun HomeScreen(
     navController: NavController,
-    dao: RoomDao
 ){
-    attempt1(navController,dao)
-}
-
-
-@Composable
-private fun attempt1(
-    navController: NavController,
-    dao: RoomDao
-){
-
-    val viewModel = viewModel<HomeScreenViewModel>(
-        factory = HomeScreenViewModelFactory(dao)
-    )
+    val viewModel: HomeScreenViewModel = hiltViewModel()
 
     LaunchedEffect(key1 = Unit) {
         viewModel.uiEvent.collect{ event ->
