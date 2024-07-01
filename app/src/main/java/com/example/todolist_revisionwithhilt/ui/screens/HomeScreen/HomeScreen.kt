@@ -10,9 +10,15 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -29,6 +35,7 @@ fun HomeScreen(
     navController: NavController,
 ){
     val viewModel: HomeScreenViewModel = hiltViewModel()
+    val scaffoldState = remember { SnackbarHostState() }
 
     LaunchedEffect(key1 = Unit) {
         viewModel.uiEvent.collect{ event ->
@@ -36,7 +43,17 @@ fun HomeScreen(
                 is UiEvents.NavigateTo -> {
                     navController.navigate(Routes.TaskScreen)
                 }
-                else -> {}
+                is UiEvents.ShowSnackBar -> {
+                    val result =  scaffoldState.showSnackbar(
+                        message = event.message,
+                        actionLabel = event.action
+                    )
+                    if(result == SnackbarResult.ActionPerformed){
+                        viewModel.onEvent(HomeScreenEvents.UnDoDeleteClick)
+                    }
+                }
+                else -> {
+                }
             }
         }
     }
@@ -44,6 +61,9 @@ fun HomeScreen(
     val tasks = viewModel.state.collectAsState().value.tasks.collectAsState(initial = emptyList()).value
 
     Scaffold(
+        snackbarHost = {
+            SnackbarHost(hostState = scaffoldState)
+        },
         floatingActionButton = {
             FloatingActionButton(
                 elevation = FloatingActionButtonDefaults.elevation(5.dp),
