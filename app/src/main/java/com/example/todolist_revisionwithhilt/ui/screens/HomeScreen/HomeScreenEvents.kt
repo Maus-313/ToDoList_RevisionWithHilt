@@ -7,4 +7,5 @@ sealed class HomeScreenEvents {
     data class OnDeleteTask(val task: TaskItemData): HomeScreenEvents()
     object OnClickAddTask: HomeScreenEvents()
     object UnDoDeleteClick: HomeScreenEvents()
+    data class OnTaskClicked(val id: Int): HomeScreenEvents()
 }

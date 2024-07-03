@@ -19,4 +19,7 @@ interface RoomDao {
     @Query("SELECT * FROM TaskItemData")
     fun getAllTasks(): Flow<List<TaskItemData>>
 
+    @Query("select * from TaskItemData where id = :id")
+    fun getTaskById(id: Int): Flow<TaskItemData>
+
 }

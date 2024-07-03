@@ -7,8 +7,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.room.Room
-import com.example.todolist_revisionwithhilt.RoomDB.ToDoDatabase
 import com.example.todolist_revisionwithhilt.util.Routes
 import com.example.todolist_revisionwithhilt.ui.screens.HomeScreen.HomeScreen
 import com.example.todolist_revisionwithhilt.ui.screens.TaskScreen.TaskScreen
@@ -26,12 +24,13 @@ class MainActivity : ComponentActivity() {
                 NavHost(navController = navController, startDestination = Routes.HomeScreen){
                     composable<Routes.HomeScreen>{
                         HomeScreen(
-                            navController
+                            navController = navController
                         )
                     }
                     composable<Routes.TaskScreen>{
                         TaskScreen(
-                            navController = navController
+                            navController = navController,
+//                            id = arg.id
                         )
                     }
                 }

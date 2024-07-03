@@ -1,15 +1,13 @@
 package com.example.todolist_revisionwithhilt.ui.screens.TaskScreen
 
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavController
 import com.example.todolist_revisionwithhilt.Repository.RoomRepo
-import com.example.todolist_revisionwithhilt.RoomDB.RoomDao
 import com.example.todolist_revisionwithhilt.RoomDB.TaskItemData
 import com.example.todolist_revisionwithhilt.util.UiEvents
-import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -22,7 +20,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TaskScreenViewModel @Inject constructor(
-    private val repo: RoomRepo
+    private val repo: RoomRepo,
+    private val savedStateHandle: SavedStateHandle
 ): ViewModel(){
 
     private val _state = MutableStateFlow(TaskState())
@@ -30,6 +29,24 @@ class TaskScreenViewModel @Inject constructor(
 
     private val _uiEvent = Channel<UiEvents>()
     val uiEvents = _uiEvent.receiveAsFlow()
+
+    init {
+        val id = savedStateHandle.get<Int>("id")
+        if(id!=null && id != -1){
+            viewModelScope.launch {
+                val task = withContext(Dispatchers.IO) {
+                    repo.getTaskById(id).asLiveData().value
+                }
+                if (task != null) {
+                    _state.value = _state.value.copy(
+                        title = mutableStateOf(task.title),
+                        description = mutableStateOf(task.description)
+                    )
+                }
+            }
+        }
+    }
+
 
     fun onEvent(event: TaskScreenEvents){
         when(event){

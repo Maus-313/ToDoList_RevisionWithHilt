@@ -26,7 +26,10 @@ import com.example.todolist_revisionwithhilt.util.UiEvents
 
 @Composable
 
-fun TaskScreen(navController: NavController){
+fun TaskScreen(
+    navController: NavController,
+//    id: Int
+) {
 
     val viewModel: TaskScreenViewModel = hiltViewModel()
     val title = viewModel.state.collectAsState().value.title.value

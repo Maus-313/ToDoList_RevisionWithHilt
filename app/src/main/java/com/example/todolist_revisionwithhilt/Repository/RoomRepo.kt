@@ -8,5 +8,5 @@ interface RoomRepo {
     suspend fun addTask(task : TaskItemData)
     suspend fun deleteTask(task : TaskItemData)
     fun getAllTasks(): Flow<List<TaskItemData>>
-
+    fun getTaskById(id: Int): Flow<TaskItemData>
 }

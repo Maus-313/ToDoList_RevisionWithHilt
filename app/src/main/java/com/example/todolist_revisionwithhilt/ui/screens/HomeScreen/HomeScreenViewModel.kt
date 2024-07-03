@@ -50,6 +50,9 @@ class HomeScreenViewModel @Inject constructor(
                     }
                 }
             }
+            is HomeScreenEvents.OnTaskClicked -> {
+                sendUiEvent(UiEvents.NavigateTo(Routes.TaskScreen))
+            }
         }
     }
 

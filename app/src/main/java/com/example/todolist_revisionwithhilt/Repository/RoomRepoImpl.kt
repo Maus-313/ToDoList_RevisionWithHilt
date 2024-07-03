@@ -20,4 +20,8 @@ class RoomRepoImpl(
          return dao.getAllTasks()
     }
 
+    override fun getTaskById(id: Int): Flow<TaskItemData> {
+        return dao.getTaskById(id)
+    }
+
 }
