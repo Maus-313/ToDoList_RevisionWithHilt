@@ -41,7 +41,7 @@ fun HomeScreen(
         viewModel.uiEvent.collect{ event ->
             when(event){
                 is UiEvents.NavigateTo -> {
-                    navController.navigate(Routes.TaskScreen)
+                    navController.navigate(Routes.TaskScreen(event.id))
                 }
                 is UiEvents.ShowSnackBar -> {
                     val result =  scaffoldState.showSnackbar(

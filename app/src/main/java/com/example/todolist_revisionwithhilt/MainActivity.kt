@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.example.todolist_revisionwithhilt.util.Routes
 import com.example.todolist_revisionwithhilt.ui.screens.HomeScreen.HomeScreen
 import com.example.todolist_revisionwithhilt.ui.screens.TaskScreen.TaskScreen
@@ -28,9 +29,10 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                     composable<Routes.TaskScreen>{
+                        val args = it.toRoute<Routes.TaskScreen>()
                         TaskScreen(
                             navController = navController,
-//                            id = arg.id
+                            id = args.id
                         )
                     }
                 }

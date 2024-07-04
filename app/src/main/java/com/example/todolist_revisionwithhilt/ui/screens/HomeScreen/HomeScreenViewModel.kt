@@ -41,7 +41,7 @@ class HomeScreenViewModel @Inject constructor(
                 ))
             }
             is HomeScreenEvents.OnClickAddTask -> {
-                sendUiEvent(UiEvents.NavigateTo(Routes.TaskScreen))
+                sendUiEvent(UiEvents.NavigateTo(Routes.TaskScreen(-1),-1))
             }
             is HomeScreenEvents.UnDoDeleteClick -> {
                 deletedTask?.let{
@@ -51,7 +51,7 @@ class HomeScreenViewModel @Inject constructor(
                 }
             }
             is HomeScreenEvents.OnTaskClicked -> {
-                sendUiEvent(UiEvents.NavigateTo(Routes.TaskScreen))
+                sendUiEvent(UiEvents.NavigateTo(Routes.TaskScreen(event.id),event.id))
             }
         }
     }

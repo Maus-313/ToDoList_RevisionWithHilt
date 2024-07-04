@@ -6,7 +6,8 @@ object Routes {
 
     @Serializable
     object HomeScreen
+
     @Serializable
-    object TaskScreen
+    data class TaskScreen(val id: Int)
 
 }
