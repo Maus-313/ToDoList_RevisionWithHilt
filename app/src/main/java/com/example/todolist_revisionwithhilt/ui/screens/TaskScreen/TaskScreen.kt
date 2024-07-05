@@ -21,6 +21,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.todolist_revisionwithhilt.RoomDB.RoomDao
+import com.example.todolist_revisionwithhilt.RoomDB.TaskItemData
 import com.example.todolist_revisionwithhilt.util.UiEvents
 
 
@@ -28,7 +29,6 @@ import com.example.todolist_revisionwithhilt.util.UiEvents
 
 fun TaskScreen(
     navController: NavController,
-    id: Int
 ) {
 
     val viewModel: TaskScreenViewModel = hiltViewModel()

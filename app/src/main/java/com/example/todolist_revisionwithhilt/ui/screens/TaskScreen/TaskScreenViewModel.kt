@@ -1,5 +1,6 @@
 package com.example.todolist_revisionwithhilt.ui.screens.TaskScreen
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -24,6 +25,8 @@ class TaskScreenViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle
 ): ViewModel(){
 
+    val TAG = "MAUS"
+
     private val _state = MutableStateFlow(TaskState())
     val state = _state.asStateFlow()
 
@@ -34,14 +37,12 @@ class TaskScreenViewModel @Inject constructor(
         val id = savedStateHandle.get<Int>("id")
         if(id!=null && id != -1){
             viewModelScope.launch {
-                val task = withContext(Dispatchers.IO) {
-                    repo.getTaskById(id).asLiveData().value
-                }
-                if (task != null) {
-                    _state.value = _state.value.copy(
-                        title = mutableStateOf(task.title),
-                        description = mutableStateOf(task.description)
-                    )
+                repo.getTaskById(id).asLiveData().observeForever{ task ->
+                    if (task != null) {
+                        onEvent(TaskScreenEvents.UpdateId(task.id))
+                        onEvent(TaskScreenEvents.UpdateTitle(task.title))
+                        onEvent(TaskScreenEvents.UpdateDescription(task.description))
+                    }
                 }
             }
         }
@@ -50,6 +51,11 @@ class TaskScreenViewModel @Inject constructor(
 
     fun onEvent(event: TaskScreenEvents){
         when(event){
+            is TaskScreenEvents.UpdateId -> {
+                _state.value = _state.value.copy(
+                    id = mutableStateOf(event.id)
+                )
+            }
             is TaskScreenEvents.UpdateTitle -> {
                 _state.value = _state.value.copy(
                     title = mutableStateOf(event.text)
@@ -61,7 +67,7 @@ class TaskScreenViewModel @Inject constructor(
                 )
             }
             is TaskScreenEvents.AddTask -> {
-                val task = TaskItemData(0, state.value.title.value, state.value.description.value)
+                val task = TaskItemData(state.value.id.value, state.value.title.value, state.value.description.value)
                 viewModelScope.launch(Dispatchers.IO) {
                     repo.addTask(task)
                 }
@@ -70,7 +76,7 @@ class TaskScreenViewModel @Inject constructor(
         }
     }
 
-    fun sendUiEvent(event: UiEvents){
+    private fun sendUiEvent(event: UiEvents){
         viewModelScope.launch {
             _uiEvent.send(event)
         }

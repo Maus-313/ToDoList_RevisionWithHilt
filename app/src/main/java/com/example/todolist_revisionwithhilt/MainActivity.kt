@@ -29,10 +29,8 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                     composable<Routes.TaskScreen>{
-                        val args = it.toRoute<Routes.TaskScreen>()
                         TaskScreen(
-                            navController = navController,
-                            id = args.id
+                            navController = navController
                         )
                     }
                 }
