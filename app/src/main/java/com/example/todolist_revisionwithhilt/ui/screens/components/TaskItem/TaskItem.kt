@@ -52,6 +52,10 @@ import com.example.todolist_revisionwithhilt.RoomDB.TaskItemData
 import com.example.todolist_revisionwithhilt.ui.screens.HomeScreen.HomeScreenEvents
 import com.example.todolist_revisionwithhilt.ui.screens.HomeScreen.HomeScreenViewModel
 import com.example.todolist_revisionwithhilt.ui.theme.Purple80
+import com.example.todolist_revisionwithhilt.ui.theme.PurpleGrey40
+import com.example.todolist_revisionwithhilt.ui.theme.PurpleGrey80
+import com.example.todolist_revisionwithhilt.ui.theme.Typography
+import com.example.todolist_revisionwithhilt.ui.theme.black
 
 @Composable
 fun TaskItem(
@@ -81,7 +85,8 @@ fun TaskItem(
             Text(
                 text = task.title,
                 Modifier.padding(start = 15.dp),
-                color = Color.White
+                color = Color.White,
+                style = Typography.bodyLarge
             )
             IconButton(onClick = {
                 viewModel.onEvent(HomeScreenEvents.OnDeleteTask(task))
@@ -111,7 +116,7 @@ fun TaskItemPrev(
             .clickable {
 //                viewModel.onEvent(HomeScreenEvents.OnTaskClicked(task.id))
             }
-            .background(color = Purple80, shape = RoundedCornerShape(10.dp)),
+            .background(color = PurpleGrey80, shape = RoundedCornerShape(10.dp)),
     ){
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -126,7 +131,8 @@ fun TaskItemPrev(
             Text(
                 text = task,
                 Modifier.padding(start = 15.dp),
-                color = Color.Black
+                color = Color.Black,
+                style = Typography.bodyLarge
             )
             IconButton(onClick = {
 //                viewModel.onEvent(HomeScreenEvents.OnDeleteTask(task))
@@ -134,6 +140,7 @@ fun TaskItemPrev(
                 Icon(
                     imageVector = Icons.Outlined.Delete,
                     contentDescription = "Delete",
+                    tint = black
                 )
             }
         }

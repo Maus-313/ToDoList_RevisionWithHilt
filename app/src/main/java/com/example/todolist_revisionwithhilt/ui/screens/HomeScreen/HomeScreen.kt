@@ -35,13 +35,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.todolist_revisionwithhilt.RoomDB.RoomDao
+import com.example.todolist_revisionwithhilt.ui.screens.components.TaskItem.SampleStringProvider
 import com.example.todolist_revisionwithhilt.util.Routes
 import com.example.todolist_revisionwithhilt.ui.screens.components.TaskItem.TaskItem
+import com.example.todolist_revisionwithhilt.ui.screens.components.TaskItem.TaskItemPrev
 import com.example.todolist_revisionwithhilt.util.UiEvents
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -131,12 +135,11 @@ fun HomeScreen(
 
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview(
-
-)
+@Preview()
 @Composable
-fun s(){
-    Scaffold (
+fun HomeScreenPrev(){
+
+    Scaffold(
         topBar = {
             TopAppBar(
                 title = {
@@ -146,7 +149,9 @@ fun s(){
                     containerColor = Color(0xFF745A25)
                 ),
                 modifier = Modifier
-                    .padding(5.dp)
+                    .padding(
+                        5.dp
+                    )
                     .border(
                         width = 1.dp,
                         color = Color.Black,
@@ -155,12 +160,30 @@ fun s(){
                     .clip(RoundedCornerShape(5.dp))
                 ,
             )
+        },
+        snackbarHost = {
+//            SnackbarHost(hostState = scaffoldState)
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                elevation = FloatingActionButtonDefaults.elevation(5.dp),
+                onClick ={
+//                    viewModel.onEvent(HomeScreenEvents.OnClickAddTask)
+                }
+            ) {
+                Icon(imageVector = Icons.Default.Add, contentDescription = "Add Button")
+            }
         }
     ){
-        Column(
-            modifier = Modifier.padding(it)
-        ) {
-
+        LazyColumn (
+            modifier = Modifier
+                .padding(it)
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.End
+        ){
+            items(5){
+                TaskItemPrev(task = "Task 1")
+            }
         }
     }
 }
